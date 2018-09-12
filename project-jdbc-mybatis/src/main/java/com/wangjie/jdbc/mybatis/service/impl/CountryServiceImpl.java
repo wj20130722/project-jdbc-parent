@@ -15,10 +15,10 @@ import tk.mybatis.mapper.weekend.WeekendCriteria;
 import java.util.List;
 
 /**
- * Created by wangjie on 2018/8/7.
+ * @author wangjie
  */
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = true,rollbackFor = Exception.class)
 public class CountryServiceImpl implements CountryService{
 
     @Autowired

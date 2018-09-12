@@ -19,13 +19,13 @@ import java.util.List;
  * Created by wangjie on 2018/8/6.
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserMapper userMapper;
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true,rollbackFor = Exception.class)
     @Override
     public User findUserByName(String username) {
         //Mapper 提供的通用Example
@@ -79,7 +79,8 @@ public class UserServiceImpl implements UserService{
         }
         else{
 //            userMapper.insertUseGeneratedKeys(user); //使用jdbc的getGeneratedKey方式获取主键
-            userMapper.insert(user); //使用注解配置的jdbc after方式获取自增主键
+            //使用注解配置的jdbc after方式获取自增主键
+            userMapper.insert(user);
         }
     }
 

@@ -28,6 +28,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {
     /**
      * 设置用户配置的参数
      */
+    @Override
     public void addConfigurationProperties(Properties properties) {
     	//先调用父类方法保证父类方法可以正常使用
     	super.addConfigurationProperties(properties);
@@ -42,9 +43,10 @@ public class MyCommentGenerator extends DefaultCommentGenerator {
     /**
      * 给字段添加注释信息
      */
-	public void addFieldComment(Field field,
-            IntrospectedTable introspectedTable,
-            IntrospectedColumn introspectedColumn) {
+	@Override
+    public void addFieldComment(Field field,
+                                IntrospectedTable introspectedTable,
+                                IntrospectedColumn introspectedColumn) {
 		//如果阻止生成所有注释，直接返回
         if (suppressAllComments) {
             return;
