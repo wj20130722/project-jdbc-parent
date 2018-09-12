@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+
+    <properties resource="application.properties"/>
+<!-- 配置数据库驱动包 -->
+  <classPathEntry location="E:\maven\repository\mysql\mysql-connector-java\5.1.45\mysql-connector-java-5.1.45.jar" />
+  <context id="context1" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+      <!--beginningDelimiter和endingDelimiter：指明数据库的用于标记数据库对象名的符号，比如ORACLE就是双引号，MYSQL默认是`反引号； -->
+      <property name="beginningDelimiter" value="`"/>
+      <property name="endingDelimiter" value="`"/>
+      <!-- 生成的Java文件的编码-->
+      <property name="javaFileEncoding" value="UTF-8"/>
+
+      <!--自定义插件-->
+      <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+          <property name="mappers" value="com.wangjie.jdbc.mybatis.util.MyMapper"/>
+      </plugin>
+
+  	<!-- 注释配置 -->
+  	<commentGenerator>
+  		<!-- 是否保留自动生成的注释,true去掉注释,一旦设为ture,代码合并的功能就会有影响 -->
+  		<property name="suppressAllComments" value="true" />
+  		<!-- 是否保留时间的注释,true不保留 -->
+  		<property name="suppressDate" value="true" />
+	</commentGenerator>
+  	<!-- jdbc链接的配置 -->
+      <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
+                      connectionURL="${spring.datasource.url}"
+                      userId="${spring.datasource.username}"
+                      password="${spring.datasource.password}">
+      </jdbcConnection>
+    <!-- java类型解析器,默认使用JavaTypeResolverDefaultImpl；注意一点，默认会先尝试使用Integer，Long，Short等来对应DECIMAL和 NUMERIC数据类型-->
+    <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
+        <!--
+            true：使用BigDecimal对应DECIMAL和 NUMERIC数据类型
+            false：默认,
+               scale>0;length>18：使用BigDecimal;
+               scale=0;length[10,18]：使用Long；
+               scale=0;length[5,9]：使用Integer；
+               scale=0;length<5：使用Short；
+         -->
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <!-- 代码生成器生成的model类存放的路径 -->
+    <javaModelGenerator targetPackage="com.wangjie.jdbc.mybatis.domain" targetProject="src/main/java">
+        <!--  for MyBatis3/MyBatis3Simple自动为每一个生成的类创建一个构造方法，构造方法包含了所有的field；而不是使用setter -->
+        <property name="constructorBased" value="false"/>
+        <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
+        <property name="enableSubPackages" value="false" />
+        <!-- 设置一个根对象,如果设置了这个根对象，那么生成的keyClass或者recordClass会继承这个类；在Table的rootClass属性中可以覆盖该选项
+         注意：如果在key class或者record class中有root class相同的属性，MBG就不会重新生成这些属性了，包括：  1，属性名相同，类型相同，有相同的getter/setter方法；  -->
+        <property name="rootClass" value="com.wangjie.jdbc.mybatis.domain.BaseEntity"/>
+        <!-- 设置是否在getter方法中，对String类型字段调用trim()方法-->
+    	<property name="trimStrings" value="true" />
+    </javaModelGenerator>
+    <!-- 代码生成器生成的映射文件存放的路径 -->
+    <sqlMapGenerator targetPackage="com.wangjie.jdbc.mybatis.dao" targetProject="src/main/resources">
+    	<property name="enableSubPackages" value="false" />
+    </sqlMapGenerator>
+
+      <!-- 代码生成器生成的映射接口存放的路径 -->
+      <!-- 对于mybatis来说，即生成Mapper接口，注意，如果没有配置该元素，那么默认不会生成Mapper接口
+        targetPackage/targetProject:同javaModelGenerator
+        type：选择怎么生成mapper接口（在MyBatis3/MyBatis3Simple下）：
+            1，ANNOTATEDMAPPER：会生成使用Mapper接口+Annotation的方式创建（SQL生成在annotation中），不会生成对应的XML；
+            2，MIXEDMAPPER：使用混合配置，会生成Mapper接口，并适当添加合适的Annotation，但是XML会生成在XML中；
+            3，XMLMAPPER：会生成Mapper接口，接口完全依赖XML；
+        注意，如果context是MyBatis3Simple：只支持ANNOTATEDMAPPER和XMLMAPPER
+    -->
+    <javaClientGenerator targetPackage="com.wangjie.jdbc.mybatis.dao" targetProject="src/main/java" type="XMLMAPPER">
+    	<property name="enableSubPackages" value="false" />
+      <!-- 可以为所有生成的接口添加一个父接口，但是MBG只负责生成，不负责检查-->
+      <!--<property name="rootInterface" value=""/>-->
+  </javaClientGenerator>
+  <!-- 对应数据库中所需要生成的表的配置 -->
+    
+	<!-- <table schema="dangdang" tableName="d_d_category" domainObjectName="Category">
+    	生成的model属性的命名与数据库对应的属性名保持一致,默认情况下mybatis会将数据库中命名进行转化如parent_id会转成parentId
+       <property name="useActualColumnNames" value="true"/>
+       在insert语句之前生成selectKey元素使得主键能够自动生成
+       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+       定制特定的属性名
+       <columnOverride column="turn" property="turn" />
+       生成时忽略数据库中的某些字段
+      <ignoreColumn column="category_value" />
+      定制生成的java类型
+      <columnOverride column="id" jdbcType="INTEGER" javaType="int"/>
+      <columnOverride column="turn" property="turn" jdbcType="INTEGER" javaType="int"/>
+      <columnOverride column="parent_id" jdbcType="INTEGER" javaType="int"/>
+    </table> -->
+
+    <table tableName="user2" domainObjectName="User">
+        <!-- 如果设置为true，生成的model类会直接使用column本身的名字，而不会再使用驼峰命名方法，比如BORN_DATE，生成的属性名字就是BORN_DATE,而不会是bornDate -->
+    	<!--<property name="useActualColumnNames" value="true"/>-->
+        <!-- 默认为false，如果设置为true，在生成的SQL中，table名字不会加上catalog或schema；-->
+        <!--<property name="ignoreQualifiersAtRuntime" value="true"/>-->
+
+        <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+
+    </table>
+
+      <table tableName="country">
+          <!-- 如果设置为true，生成的model类会直接使用column本身的名字，而不会再使用驼峰命名方法，比如BORN_DATE，生成的属性名字就是BORN_DATE,而不会是bornDate -->
+          <!--<property name="useActualColumnNames" value="true"/>-->
+          <!-- 默认为false，如果设置为true，在生成的SQL中，table名字不会加上catalog或schema；-->
+          <!--<property name="ignoreQualifiersAtRuntime" value="true"/>-->
+
+          <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+
+      </table>
+
+
+    
+  </context>
+</generatorConfiguration>
